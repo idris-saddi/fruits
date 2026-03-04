@@ -10,8 +10,14 @@ export async function getAvailableFruits(): Promise<Fruit[]> {
 
   const snapshot = await getDocs(q)
 
-  return snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  })) as Fruit[]
+  return snapshot.docs.map((doc) => {
+    const data = doc.data()
+    return {
+      id: doc.id,
+      name: data.name,
+      options: data.options,
+      pictureUrl: data.pictureUrl,
+      isAvailable: data.isAvailable,
+    }
+  }) as Fruit[]
 }
