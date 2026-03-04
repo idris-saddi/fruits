@@ -6,6 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createOrder } from "@/lib/orders.service";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const schema = z.object({
   customerName: z.string().min(2),
@@ -30,6 +31,13 @@ export default function CheckoutPage() {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
+
+  useEffect(() => {
+    if (items.length === 0) {
+      alert("Your cart is empty!");
+      router.push("/");
+    }
+  }, [items, router]);
 
   const onSubmit = async (data: FormData) => {
     if (items.length === 0) return;
@@ -57,14 +65,6 @@ export default function CheckoutPage() {
     router.push("/");
     alert("Order submitted successfully!");
   };
-
-  if (items.length === 0) {
-    return (
-      <div className="p-8">
-        <h1 className="text-xl font-bold">Your cart is empty</h1>
-      </div>
-    );
-  }
 
   return (
     <div className="max-w-xl mx-auto p-8">

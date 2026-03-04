@@ -8,16 +8,6 @@
   --secondary: #ffffff;
 }
 
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --primary: #800020;
-    --secondary: #171717;
-  }
-}
-
 /* Body */
 body {
   background: var(--background);
