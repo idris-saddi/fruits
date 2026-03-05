@@ -33,12 +33,12 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <div className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="flex justify-between items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Admin Dashboard</h1>
             <button
               onClick={() => signOut(auth)}
-              className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+              className="bg-red-600 text-white px-3 sm:px-4 py-2 rounded hover:bg-red-700 text-sm sm:text-base whitespace-nowrap"
             >
               Logout
             </button>
@@ -48,40 +48,46 @@ export default function AdminDashboard() {
 
       {/* Tabs */}
       <div className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex gap-1">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4">
+          <div className="flex gap-1 overflow-x-auto">
             <button
-              className={`px-4 py-3 font-medium ${
+              className={`px-3 sm:px-4 py-2 sm:py-3 font-medium text-xs sm:text-sm whitespace-nowrap ${
                 activeTab === "review"
                   ? "bg-gray-800 text-white border-b-2 border-blue-500"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
               onClick={() => setActiveTab("review")}
             >
-              Orders in Review {reviewCount > 0 && `(${reviewCount})`}
+              <span className="hidden sm:inline">Orders in Review</span>
+              <span className="sm:hidden">Review</span>
+              {reviewCount > 0 && ` (${reviewCount})`}
             </button>
             <button
-              className={`px-4 py-3 font-medium ${
+              className={`px-3 sm:px-4 py-2 sm:py-3 font-medium text-xs sm:text-sm whitespace-nowrap ${
                 activeTab === "progress"
                   ? "bg-gray-800 text-white border-b-2 border-blue-500"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
               onClick={() => setActiveTab("progress")}
             >
-              In Progress {progressCount > 0 && `(${progressCount})`}
+              <span className="hidden sm:inline">In Progress</span>
+              <span className="sm:hidden">Progress</span>
+              {progressCount > 0 && ` (${progressCount})`}
             </button>
             <button
-              className={`px-4 py-3 font-medium ${
+              className={`px-3 sm:px-4 py-2 sm:py-3 font-medium text-xs sm:text-sm whitespace-nowrap ${
                 activeTab === "delivery"
                   ? "bg-gray-800 text-white border-b-2 border-blue-500"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
               onClick={() => setActiveTab("delivery")}
             >
-              Delivery Map {deliveryCount > 0 && `(${deliveryCount})`}
+              <span className="hidden sm:inline">Delivery Map</span>
+              <span className="sm:hidden">Delivery</span>
+              {deliveryCount > 0 && ` (${deliveryCount})`}
             </button>
             <button
-              className={`px-4 py-3 font-medium ${
+              className={`px-3 sm:px-4 py-2 sm:py-3 font-medium text-xs sm:text-sm whitespace-nowrap ${
                 activeTab === "history"
                   ? "bg-gray-800 text-white border-b-2 border-blue-500"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -91,22 +97,23 @@ export default function AdminDashboard() {
               History
             </button>
             <button
-              className={`px-4 py-3 font-medium ${
+              className={`px-3 sm:px-4 py-2 sm:py-3 font-medium text-xs sm:text-sm whitespace-nowrap ${
                 activeTab === "fruits"
                   ? "bg-gray-800 text-white border-b-2 border-blue-500"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
               onClick={() => setActiveTab("fruits")}
             >
-              Fruits Management
+              <span className="hidden sm:inline">Fruits Management</span>
+              <span className="sm:hidden">Fruits</span>
             </button>
           </div>
         </div>
       </div>
 
       {/* Tab Content */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="bg-white p-6 rounded shadow">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
+        <div className="bg-white p-3 sm:p-6 rounded shadow">
           {activeTab === "review" && (
             <OrdersReview orders={orders} setOrders={setOrders} />
           )}
