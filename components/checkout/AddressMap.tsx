@@ -75,11 +75,6 @@ export function AddressMap({ lat, lng, address, onLocationSelect }: AddressMapPr
         <MapUpdater lat={lat} lng={lng} />
         <MapClickHandler onLocationSelect={onLocationSelect} />
       </MapContainer>
-      {onLocationSelect && (
-        <div className="absolute top-2 left-2 bg-white px-3 py-2 rounded-lg shadow-md text-xs text-gray-600 z-[1000]">
-          💡 Click on the map to adjust the location
-        </div>
-      )}
     </div>
   );
 }

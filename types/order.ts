@@ -4,6 +4,7 @@ export type OrderStatus =
   | "ready"
   | "delivered"
   | "canceled"
+  | "returned"
 
 export interface OrderItem {
   fruitId: string
