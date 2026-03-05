@@ -8,6 +8,14 @@ import { createOrder } from "@/lib/orders.service";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/useToast";
+import { geocodeAddress } from "@/lib/geocoding.service";
+import dynamic from "next/dynamic";
+
+// Dynamically import map component (Leaflet doesn't work with SSR)
+const AddressMap = dynamic(
+  () => import("@/components/checkout/AddressMap").then((mod) => mod.AddressMap),
+  { ssr: false }
+);
 
 const schema = z.object({
   customerName: z.string().min(2),
@@ -23,6 +31,9 @@ export default function CheckoutPage() {
   const total = useCartStore((s) => s.total);
   const clearCart = useCartStore((s) => s.clearCart);
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [isGeocoding, setIsGeocoding] = useState(false);
+  const [showMap, setShowMap] = useState(false);
 
   const router = useRouter();
   const { showToast, ToastComponent } = useToast();
@@ -30,10 +41,13 @@ export default function CheckoutPage() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
+
+  const address = watch("address");
 
   useEffect(() => {
     if (items.length === 0 && !isRedirecting) {
@@ -46,8 +60,71 @@ export default function CheckoutPage() {
     }
   }, [items, router, isRedirecting, showToast]);
 
+  // Debounced geocoding while typing
+  useEffect(() => {
+    if (!address || address.length < 5) {
+      setShowMap(false);
+      return;
+    }
+
+    setShowMap(true);
+    
+    const timer = setTimeout(() => {
+      handleGeocodeAddress(address);
+    }, 1000); // Wait 1 second after user stops typing
+
+    return () => clearTimeout(timer);
+  }, [address]);
+
+  const handleGeocodeAddress = async (address: string) => {
+    if (!address || address.length < 5) return;
+
+    setIsGeocoding(true);
+    try {
+      const result = await geocodeAddress(address);
+      if (result) {
+        setLocation({ lat: result.lat, lng: result.lng });
+        showToast({
+          message: "📍 Location found on map!",
+          type: "success",
+          duration: 2000,
+        });
+      } else {
+        showToast({
+          message: "Could not find location. Please check the address.",
+          type: "error",
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      showToast({
+        message: "Failed to locate address.",
+        type: "error",
+        duration: 3000,
+      });
+    } finally {
+      setIsGeocoding(false);
+    }
+  };
+
   const onSubmit = async (data: FormData) => {
     if (items.length === 0) return;
+
+    // Geocode address if not already done
+    let finalLocation = location;
+    if (!finalLocation) {
+      const result = await geocodeAddress(data.address);
+      if (result) {
+        finalLocation = { lat: result.lat, lng: result.lng };
+      } else {
+        showToast({
+          message: "Could not determine location. Please verify your address.",
+          type: "error",
+          duration: 3000,
+        });
+        return;
+      }
+    }
 
     try {
       await createOrder({
@@ -55,10 +132,7 @@ export default function CheckoutPage() {
         email: data.email,
         phone: data.phone,
         address: data.address,
-        location: {
-          lat: 0,
-          lng: 0,
-        }, // temporary
+        location: finalLocation,
         items: items.map((item) => ({
           fruitId: item.fruitId,
           fruitName: item.fruitName,
@@ -147,6 +221,35 @@ export default function CheckoutPage() {
                   className="w-full border-2 border-gray-200 focus:border-rose-500 p-4 rounded-xl outline-none transition-colors resize-none" 
                 />
                 {errors.address && <p className="text-red-500 text-sm mt-1">✗ Address is required</p>}
+                
+                {/* Map Preview */}
+                {showMap && (
+                  <div className="mt-4">
+                    <p className="text-sm font-semibold text-gray-700 mb-2">📍 Delivery Location - Click to adjust</p>
+                    {location ? (
+                      <AddressMap 
+                        lat={location.lat} 
+                        lng={location.lng} 
+                        address={address || ""}
+                        onLocationSelect={setLocation}
+                      />
+                    ) : (
+                      <div className="w-full h-[300px] rounded-xl overflow-hidden border-2 border-gray-200 flex items-center justify-center bg-gray-50">
+                        <div className="text-center text-gray-500">
+                          <div className="text-4xl mb-2">📍</div>
+                          <p>Locating address...</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                {isGeocoding && (
+                  <div className="mt-2 text-sm text-gray-500 flex items-center gap-2">
+                    <span className="animate-spin">⌛</span>
+                    <span>Finding location on map...</span>
+                  </div>
+                )}
               </div>
 
               <button 
@@ -160,7 +263,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* Order Summary */}
-          <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 h-fit sticky top-8">
+          <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 h-fit sticky top-8 mb-24 lg:mb-0">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
               <span className="text-2xl">📦</span>
               Order Summary

@@ -28,84 +28,110 @@ export default function FloatingCart() {
   return (
     <>
       {ToastComponent}
-      {/* Floating Bar */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] md:w-[600px] bg-gradient-to-r from-rose-500 via-pink-500 to-orange-400 text-white rounded-2xl px-6 py-5 flex justify-between items-center shadow-2xl z-50 backdrop-blur-lg border-2 border-white/20 hover:scale-105 transition-transform">
-        <div className="flex items-center gap-4">
-          <div className="bg-white/20 rounded-full w-12 h-12 flex items-center justify-center text-2xl">
-            🛒
-          </div>
-          <div>
-            <p className="text-sm text-white/90 font-medium">{totalItems} items</p>
-            <p className="text-xl font-bold">{(total() / 1000).toFixed(3)} TND</p>
+      {/* Floating Bar - Bottom center on mobile, bottom-right on desktop */}
+      {!open && (
+        <div className="fixed bottom-0 left-0 right-0 md:bottom-6 md:right-6 md:left-auto md:w-auto z-[1200] pointer-events-none">
+          <div className="pointer-events-auto bg-gradient-to-r from-rose-500 via-pink-500 to-orange-400 text-white rounded-t-2xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 flex justify-between items-center shadow-2xl backdrop-blur-lg border-2 border-white/20 md:hover:scale-105 transition-all duration-300 w-full md:w-auto md:min-w-[400px]">
+            <div className="flex items-center gap-3 md:gap-4 flex-1 md:flex-initial">
+              <div className="bg-white/20 rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-xl md:text-2xl shrink-0">
+                🛒
+              </div>
+              <div>
+                <p className="text-xs md:text-sm text-white/90 font-medium">{totalItems} item{totalItems !== 1 ? 's' : ''}</p>
+                <p className="text-lg md:text-xl font-bold">{(total() / 1000).toFixed(3)} TND</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setOpen(true)}
+              className="bg-white text-rose-600 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-bold hover:bg-gray-50 active:scale-98 transition-all shadow-lg hover:shadow-xl text-sm md:text-base shrink-0 ml-2 touch-manipulation"
+            >
+              <span className="hidden sm:inline">View Cart 🎉</span>
+              <span className="sm:hidden">View 🎉</span>
+            </button>
           </div>
         </div>
+      )}
 
-        <button
-          onClick={() => setOpen(true)}
-          className="bg-white text-rose-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl"
-        >
-          View Cart 🎉
-        </button>
-      </div>
-
-      {/* Drawer */}
+      {/* Drawer - Slide from bottom on mobile, from right on desktop */}
       {open && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex justify-end" onClick={() => setOpen(false)}>
-          <div className="bg-gradient-to-b from-white to-gray-50 w-full md:w-[450px] h-full p-8 overflow-y-auto shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-3xl font-bold text-gray-800 flex items-center gap-2">
-                  <span className="text-3xl">🛍️</span>
-                  Your Cart
-                </h2>
-                <p className="text-gray-500 text-sm mt-1">{totalItems} items selected</p>
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[1100] flex items-end md:items-stretch md:justify-end transition-opacity duration-200" 
+          onClick={() => setOpen(false)}
+        >
+          <div 
+            className="bg-gradient-to-b from-white to-gray-50 w-full md:w-[450px] max-h-[85vh] md:max-h-screen md:h-screen overflow-y-auto shadow-2xl rounded-t-3xl md:rounded-none transform transition-transform duration-300 ease-out pb-safe md:pb-0" 
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-6 md:p-8">
+              {/* Drawer handle for mobile */}
+              <div className="md:hidden w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div>
+              
+              <div className="flex items-center justify-between mb-6 md:mb-8">
+                <div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
+                    <span className="text-2xl md:text-3xl">🛍️</span>
+                    Your Cart
+                  </h2>
+                  <p className="text-gray-500 text-sm mt-1">{totalItems} item{totalItems !== 1 ? 's' : ''} selected</p>
+                </div>
+                <button 
+                  onClick={() => setOpen(false)} 
+                  className="text-gray-400 hover:text-gray-600 active:text-gray-700 text-3xl md:text-4xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+                  aria-label="Close cart"
+                >
+                  ×
+                </button>
               </div>
-              <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-600 text-3xl">
-                ×
-              </button>
-            </div>
 
-            <div className="space-y-4">
-              {items.map((item) => (
-                <div key={`${item.fruitId}-${item.quantityKg}`} className="bg-white rounded-2xl p-5 shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <p className="font-bold text-lg text-gray-800">{item.fruitName}</p>
-                      <p className="text-sm text-gray-500 mt-1">
-                        {item.quantityKg}kg × {item.blocks} blocks
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold text-xl text-rose-600">{((item.pricePerBlock * item.blocks) / 1000).toFixed(3)} TND</p>
+              <div className="space-y-3 md:space-y-4 mb-4 md:mb-6">
+                {items.map((item) => (
+                  <div key={`${item.fruitId}-${item.quantityKg}`} className="bg-white rounded-xl md:rounded-2xl p-4 md:p-5 shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
+                    <div className="flex justify-between items-start gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-base md:text-lg text-gray-800 truncate">{item.fruitName}</p>
+                        <p className="text-xs md:text-sm text-gray-500 mt-1">
+                          {item.quantityKg}kg × {item.blocks} block{item.blocks !== 1 ? 's' : ''}
+                        </p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className="font-bold text-lg md:text-xl text-rose-600 whitespace-nowrap">{((item.pricePerBlock * item.blocks) / 1000).toFixed(3)} TND</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-8 bg-gradient-to-r from-rose-50 to-orange-50 rounded-2xl p-6 border-2 border-rose-200">
-              <div className="flex justify-between items-center mb-6">
-                <span className="text-gray-600 font-medium">Total Amount</span>
-                <span className="text-3xl font-bold text-rose-600">{(total() / 1000).toFixed(3)} TND</span>
+                ))}
               </div>
 
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  router.push("/checkout");
-                }}
-                className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
-              >
-                Proceed to Checkout 🚀
-              </button>
+              <div className="mt-6 md:mt-8 bg-gradient-to-r from-rose-50 to-orange-50 rounded-2xl p-5 md:p-6 border-2 border-rose-200 sticky bottom-0 md:static">
+                <div className="flex justify-between items-center mb-4 md:mb-6">
+                  <span className="text-gray-600 font-medium text-sm md:text-base">Total Amount</span>
+                  <span className="text-2xl md:text-3xl font-bold text-rose-600">{(total() / 1000).toFixed(3)} TND</span>
+                </div>
 
-              <div className="flex gap-3 mt-4">
-                <button onClick={() => setOpen(false)} className="flex-1 border-2 border-gray-300 px-4 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors">
-                  Continue Shopping
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    router.push("/checkout");
+                  }}
+                  className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 active:scale-98 text-white py-3.5 md:py-4 rounded-xl font-bold text-base md:text-lg shadow-lg hover:shadow-xl transition-all touch-manipulation"
+                >
+                  Proceed to Checkout 🚀
                 </button>
-                <button onClick={handleClearCart} className="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-xl font-semibold transition-colors">
-                  Clear Cart
-                </button>
+
+                <div className="flex gap-2 md:gap-3 mt-3 md:mt-4">
+                  <button 
+                    onClick={() => setOpen(false)} 
+                    className="flex-1 border-2 border-gray-300 px-3 md:px-4 py-2.5 md:py-3 rounded-xl font-semibold hover:bg-gray-50 active:bg-gray-100 transition-colors text-sm md:text-base touch-manipulation"
+                  >
+                    Continue Shopping
+                  </button>
+                  <button 
+                    onClick={handleClearCart} 
+                    className="flex-1 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white px-3 md:px-4 py-2.5 md:py-3 rounded-xl font-semibold transition-colors text-sm md:text-base touch-manipulation"
+                  >
+                    Clear Cart
+                  </button>
+                </div>
               </div>
             </div>
           </div>
