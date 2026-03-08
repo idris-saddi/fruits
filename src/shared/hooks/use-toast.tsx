@@ -1,0 +1,33 @@
+"use client"
+
+import { useState, useCallback } from "react"
+import Toast from "@/shared/ui/toast"
+
+interface ToastConfig {
+  message: string
+  type?: "success" | "error" | "info"
+  duration?: number
+}
+
+export function useToast() {
+  const [toast, setToast] = useState<ToastConfig | null>(null)
+
+  const showToast = useCallback((config: ToastConfig) => {
+    setToast(config)
+  }, [])
+
+  const hideToast = useCallback(() => {
+    setToast(null)
+  }, [])
+
+  const ToastComponent = toast ? (
+    <Toast
+      message={toast.message}
+      type={toast.type}
+      duration={toast.duration}
+      onClose={hideToast}
+    />
+  ) : null
+
+  return { showToast, ToastComponent }
+}
