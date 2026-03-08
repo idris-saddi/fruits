@@ -138,9 +138,9 @@ export default function DeliveryMap({ orders, setOrders }: Props) {
         </div>
 
         {/* Map */}
-        <div className="w-full md:flex-1 h-[400px] md:h-[500px] border-2 border-blue-500 rounded bg-gray-100 relative">
+        <div className="w-full md:flex-1 h-[600px] md:h-[500px] border-2 border-blue-500 rounded bg-gray-100 relative">
           <div className="absolute top-2 left-2 z-50 bg-white px-2 py-1 rounded text-xs">
-            Map Container (400px height)
+            Map Container (600px height)
           </div>
           <DeliveryMapView
             visibleOrders={visibleOrders}
