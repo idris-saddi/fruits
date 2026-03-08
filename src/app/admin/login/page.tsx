@@ -1,15 +1,22 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth"
 import { auth } from "@/shared/lib/firebase"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 const googleProvider = new GoogleAuthProvider()
 
 export default function AdminLoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [error, setError] = useState("")
+
+  useEffect(() => {
+    if (searchParams.get("error") === "unauthorized") {
+      setError("Access denied. Your account is not authorized as an admin.")
+    }
+  }, [searchParams])
 
   const handleGoogleSignIn = async () => {
     try {
