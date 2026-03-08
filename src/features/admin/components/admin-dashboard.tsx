@@ -10,6 +10,7 @@ import OrdersHistory from "./orders-history"
 import FruitsManagement from "./fruits-management"
 import { signOut } from "firebase/auth"
 import { auth } from "@/shared/lib/firebase"
+import { useToast } from "@/shared/hooks/use-toast"
 
 type Tab = "review" | "progress" | "delivery" | "history" | "fruits"
 
@@ -24,10 +25,18 @@ const TABS: { key: Tab; label: string; shortLabel?: string }[] = [
 export default function AdminDashboard() {
   const [orders, setOrders] = useState<Order[]>([])
   const [activeTab, setActiveTab] = useState<Tab>("review")
+  const { showToast, ToastComponent } = useToast()
 
   useEffect(() => {
-    getAllOrders().then(setOrders)
-  }, [])
+    getAllOrders()
+      .then(setOrders)
+      .catch(() => {
+        showToast({
+          message: "Missing or insufficient permissions. Please contact an administrator.",
+          type: "error",
+        })
+      })
+  }, [showToast])
 
   const counts: Record<string, number> = {
     review: orders.filter((o) => o.status === "in_review").length,
@@ -37,6 +46,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      {ToastComponent}
       {/* Header */}
       <div className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
