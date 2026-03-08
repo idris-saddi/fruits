@@ -223,7 +223,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
           disabled={isSubmitting}
           className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 disabled:from-gray-400 disabled:to-gray-400 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all mt-8"
         >
-          {isSubmitting ? "Processing... ⏳" : "Place Order 🚀"}
+          {isSubmitting ? "Processing... ⏳" : "Place Order"}
         </button>
       </form>
     </div>

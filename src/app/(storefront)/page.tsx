@@ -25,16 +25,32 @@ export default async function Home() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-orange-50 via-rose-50 to-pink-50 py-16">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-5xl font-bold text-gray-800 mb-4">
-            Fresh & Delicious 🌟
+      {/* Hero Video Section */}
+      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative z-10 text-center text-white px-6">
+          <h2 className="text-5xl md:text-7xl font-bold mb-4 drop-shadow-lg">
+            Fresh & Delicious
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl max-w-2xl mx-auto drop-shadow-md">
             Discover the finest selection of seasonal fruits, delivered fresh to
             your doorstep in Tunisia
           </p>
+          <a
+            href="#fruits"
+            className="mt-8 inline-block bg-rose-500 hover:bg-rose-600 transition-colors text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg"
+          >
+            Shop Now
+          </a>
         </div>
       </section>
 

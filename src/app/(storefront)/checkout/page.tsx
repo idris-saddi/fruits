@@ -56,7 +56,7 @@ export default function CheckoutPage() {
       clearCart()
 
       showToast({
-        message: "Order placed successfully! 🎉",
+        message: "Order placed successfully!",
         type: "success",
         duration: 3000,
       })

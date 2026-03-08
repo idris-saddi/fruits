@@ -55,8 +55,8 @@ export default function FloatingCart() {
               onClick={() => setOpen(true)}
               className="bg-white text-rose-600 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-bold hover:bg-gray-50 active:scale-98 transition-all shadow-lg hover:shadow-xl text-sm md:text-base shrink-0 ml-2 touch-manipulation"
             >
-              <span className="hidden sm:inline">View Cart 🎉</span>
-              <span className="sm:hidden">View 🎉</span>
+              <span className="hidden sm:inline">View Cart</span>
+              <span className="sm:hidden">View</span>
             </button>
           </div>
         </div>
@@ -168,7 +168,7 @@ export default function FloatingCart() {
                   }}
                   className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 active:scale-98 text-white py-3.5 md:py-4 rounded-xl font-bold text-base md:text-lg shadow-lg hover:shadow-xl transition-all touch-manipulation"
                 >
-                  Proceed to Checkout 🚀
+                  Proceed to Checkout
                 </button>
 
                 <div className="flex gap-2 md:gap-3 mt-3 md:mt-4">
