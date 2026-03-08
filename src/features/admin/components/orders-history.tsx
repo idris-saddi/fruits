@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useMemo, Fragment } from "react"
 import { Order } from "@/types/order"
 import { formatPrice } from "@/shared/utils/format"
 
@@ -13,81 +14,281 @@ const STATUS_CONFIG = {
   returned: { label: "Returned", bg: "bg-orange-600", row: "bg-orange-50", border: "border-orange-300" },
 } as const
 
+type StatusFilter = "all" | "delivered" | "canceled" | "returned"
+type SortField = "date" | "total" | "customer" | "items"
+type SortDir = "asc" | "desc"
+const PAGE_SIZES = [10, 25, 50]
+
+function formatDate(date?: Date) {
+  if (!date) return "—"
+  const d = date instanceof Date ? date : new Date((date as unknown as { seconds: number }).seconds * 1000)
+  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
+}
+
 export default function OrdersHistory({ orders }: OrdersHistoryProps) {
-  const completedOrders = orders.filter(
-    (o) =>
-      o.status === "delivered" ||
-      o.status === "canceled" ||
-      o.status === "returned"
+  const completedOrders = useMemo(
+    () => orders.filter((o) => o.status === "delivered" || o.status === "canceled" || o.status === "returned"),
+    [orders]
   )
 
-  const deliveredCount = completedOrders.filter((o) => o.status === "delivered").length
-  const canceledCount = completedOrders.filter((o) => o.status === "canceled").length
-  const returnedCount = completedOrders.filter((o) => o.status === "returned").length
+  // State
+  const [search, setSearch] = useState("")
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all")
+  const [sortField, setSortField] = useState<SortField>("date")
+  const [sortDir, setSortDir] = useState<SortDir>("desc")
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+
+  // Stats
+  const stats = useMemo(() => {
+    const delivered = completedOrders.filter((o) => o.status === "delivered")
+    const canceled = completedOrders.filter((o) => o.status === "canceled")
+    const returned = completedOrders.filter((o) => o.status === "returned")
+    const totalRevenue = delivered.reduce((sum, o) => sum + o.totalPrice, 0)
+    const avgOrderValue = delivered.length ? totalRevenue / delivered.length : 0
+    return {
+      total: completedOrders.length,
+      delivered: delivered.length,
+      canceled: canceled.length,
+      returned: returned.length,
+      totalRevenue,
+      avgOrderValue,
+    }
+  }, [completedOrders])
+
+  // Filtered + sorted
+  const processedOrders = useMemo(() => {
+    let result = [...completedOrders]
+
+    // Filter by status
+    if (statusFilter !== "all") {
+      result = result.filter((o) => o.status === statusFilter)
+    }
+
+    // Search
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      result = result.filter(
+        (o) =>
+          o.customerName.toLowerCase().includes(q) ||
+          o.phone.includes(q) ||
+          o.items.some((i) => i.fruitName.toLowerCase().includes(q))
+      )
+    }
+
+    // Sort
+    result.sort((a, b) => {
+      let cmp = 0
+      switch (sortField) {
+        case "date": {
+          const toMs = (d?: Date) => {
+            if (!d) return 0
+            return d instanceof Date ? d.getTime() : (d as unknown as { seconds: number }).seconds * 1000
+          }
+          cmp = toMs(a.createdAt) - toMs(b.createdAt)
+          break
+        }
+        case "total":
+          cmp = a.totalPrice - b.totalPrice
+          break
+        case "customer":
+          cmp = a.customerName.localeCompare(b.customerName)
+          break
+        case "items":
+          cmp = a.items.length - b.items.length
+          break
+      }
+      return sortDir === "asc" ? cmp : -cmp
+    })
+
+    return result
+  }, [completedOrders, statusFilter, search, sortField, sortDir])
+
+  // Pagination
+  const totalPages = Math.max(1, Math.ceil(processedOrders.length / pageSize))
+  const safePage = Math.min(page, totalPages)
+  const pagedOrders = processedOrders.slice((safePage - 1) * pageSize, safePage * pageSize)
+
+  // Reset page on filter change
+  const handleFilterChange = (fn: () => void) => {
+    fn()
+    setPage(1)
+  }
+
+  const toggleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"))
+    } else {
+      setSortField(field)
+      setSortDir("desc")
+    }
+  }
+
+  const sortIcon = (field: SortField) => {
+    if (sortField !== field) return "↕"
+    return sortDir === "asc" ? "↑" : "↓"
+  }
 
   return (
     <div>
-      <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">
-        Order History
-      </h2>
-      <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
-        Completed, canceled, and returned orders archive.
-      </p>
+      <h2 className="text-xl sm:text-2xl font-bold mb-1">Order History</h2>
+      <p className="text-sm text-gray-500 mb-4">Completed, canceled, and returned orders.</p>
 
-      <div className="mb-4 sm:mb-6">
-        <div className="flex flex-wrap gap-3 sm:gap-4 text-sm sm:text-base">
-          <span className="font-semibold">Delivered: {deliveredCount}</span>
-          <span className="font-semibold">Canceled: {canceledCount}</span>
-          <span className="font-semibold">Returned: {returnedCount}</span>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-5">
+        <div className="bg-gray-50 border rounded-lg p-3 text-center">
+          <div className="text-2xl font-bold">{stats.total}</div>
+          <div className="text-xs text-gray-500">Total</div>
+        </div>
+        <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+          <div className="text-2xl font-bold text-green-700">{stats.delivered}</div>
+          <div className="text-xs text-green-600">Delivered</div>
+        </div>
+        <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-center">
+          <div className="text-2xl font-bold text-red-700">{stats.canceled}</div>
+          <div className="text-xs text-red-600">Canceled</div>
+        </div>
+        <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-center">
+          <div className="text-2xl font-bold text-orange-700">{stats.returned}</div>
+          <div className="text-xs text-orange-600">Returned</div>
+        </div>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
+          <div className="text-2xl font-bold text-blue-700">{formatPrice(stats.totalRevenue)}</div>
+          <div className="text-xs text-blue-600">Revenue (TND)</div>
+        </div>
+        <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 text-center">
+          <div className="text-2xl font-bold text-purple-700">{formatPrice(stats.avgOrderValue)}</div>
+          <div className="text-xs text-purple-600">Avg Order (TND)</div>
         </div>
       </div>
 
-      {completedOrders.length === 0 ? (
-        <p className="text-gray-500 italic">No completed orders</p>
+      {/* Filters Bar */}
+      <div className="flex flex-col sm:flex-row gap-2 mb-4">
+        <input
+          type="text"
+          placeholder="Search name, phone, item..."
+          value={search}
+          onChange={(e) => handleFilterChange(() => setSearch(e.target.value))}
+          className="border rounded-lg px-3 py-2 text-sm flex-1 min-w-0"
+        />
+        <select
+          value={statusFilter}
+          onChange={(e) => handleFilterChange(() => setStatusFilter(e.target.value as StatusFilter))}
+          className="border rounded-lg px-3 py-2 text-sm bg-white"
+        >
+          <option value="all">All Statuses</option>
+          <option value="delivered">Delivered</option>
+          <option value="canceled">Canceled</option>
+          <option value="returned">Returned</option>
+        </select>
+        <select
+          value={pageSize}
+          onChange={(e) => handleFilterChange(() => setPageSize(Number(e.target.value)))}
+          className="border rounded-lg px-3 py-2 text-sm bg-white w-20"
+        >
+          {PAGE_SIZES.map((s) => (
+            <option key={s} value={s}>{s}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Results count */}
+      <div className="text-xs text-gray-500 mb-2">
+        {processedOrders.length} order{processedOrders.length !== 1 ? "s" : ""} found
+      </div>
+
+      {processedOrders.length === 0 ? (
+        <p className="text-gray-500 italic py-8 text-center">No orders match your filters</p>
       ) : (
         <>
           {/* Desktop Table */}
-          <div className="hidden md:block overflow-x-auto">
-            <table className="w-full border border-gray-300">
+          <div className="hidden md:block overflow-x-auto border rounded-lg">
+            <table className="w-full text-sm">
               <thead className="bg-gray-800 text-white">
                 <tr>
-                  <th className="p-3 text-left">Customer</th>
-                  <th className="p-3 text-left">Phone</th>
-                  <th className="p-3 text-left">Items</th>
-                  <th className="p-3 text-left">Total (TND)</th>
-                  <th className="p-3 text-left">Status</th>
+                  <th className="p-2.5 text-left w-8"></th>
+                  <th
+                    className="p-2.5 text-left cursor-pointer select-none hover:bg-gray-700"
+                    onClick={() => toggleSort("customer")}
+                  >
+                    Customer {sortIcon("customer")}
+                  </th>
+                  <th
+                    className="p-2.5 text-left cursor-pointer select-none hover:bg-gray-700"
+                    onClick={() => toggleSort("items")}
+                  >
+                    Items {sortIcon("items")}
+                  </th>
+                  <th
+                    className="p-2.5 text-left cursor-pointer select-none hover:bg-gray-700"
+                    onClick={() => toggleSort("total")}
+                  >
+                    Total {sortIcon("total")}
+                  </th>
+                  <th className="p-2.5 text-left">Status</th>
+                  <th
+                    className="p-2.5 text-left cursor-pointer select-none hover:bg-gray-700"
+                    onClick={() => toggleSort("date")}
+                  >
+                    Date {sortIcon("date")}
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {completedOrders.map((order) => {
+                {pagedOrders.map((order) => {
                   const config = STATUS_CONFIG[order.status as keyof typeof STATUS_CONFIG]
+                  const isExpanded = expandedId === order.id
                   return (
-                    <tr
-                      key={order.id}
-                      className={`border-b hover:bg-gray-50 ${config?.row ?? ""}`}
-                    >
-                      <td className="p-3">{order.customerName}</td>
-                      <td className="p-3">{order.phone}</td>
-                      <td className="p-3">
-                        <ul className="text-sm">
-                          {order.items.map((item, idx) => (
-                            <li key={idx}>
-                              {item.fruitName} - {item.quantityKg}kg
-                            </li>
-                          ))}
-                        </ul>
-                      </td>
-                      <td className="p-3 font-semibold">
-                        {formatPrice(order.totalPrice)}
-                      </td>
-                      <td className="p-3">
-                        <span
-                          className={`px-2 py-1 rounded text-white text-sm ${config?.bg ?? "bg-gray-600"}`}
-                        >
-                          {config?.label ?? order.status}
-                        </span>
-                      </td>
-                    </tr>
+                    <Fragment key={order.id}>
+                      <tr
+                        className={`border-b cursor-pointer hover:bg-gray-100 transition-colors ${config?.row ?? ""}`}
+                        onClick={() => setExpandedId(isExpanded ? null : order.id ?? null)}
+                      >
+                        <td className="p-2.5 text-gray-400 text-xs w-8">{isExpanded ? "▼" : "▶"}</td>
+                        <td className="p-2.5 font-medium">{order.customerName}</td>
+                        <td className="p-2.5 text-gray-600">{order.items.length}</td>
+                        <td className="p-2.5 font-semibold">{formatPrice(order.totalPrice)}</td>
+                        <td className="p-2.5">
+                          <span className={`px-1.5 py-0.5 rounded text-white text-xs ${config?.bg ?? "bg-gray-600"}`}>
+                            {config?.label ?? order.status}
+                          </span>
+                        </td>
+                        <td className="p-2.5 text-gray-500 text-xs">{formatDate(order.createdAt)}</td>
+                      </tr>
+                      {isExpanded && (
+                        <tr className="border-b">
+                          <td colSpan={6} className="bg-gray-50 px-8 py-4">
+                            <div className="space-y-3">
+                              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                                <div>
+                                  <span className="text-gray-500 text-xs block">Phone</span>
+                                  <span className="font-medium">{order.phone}</span>
+                                </div>
+                                <div>
+                                  <span className="text-gray-500 text-xs block">Email</span>
+                                  <span className="font-medium">{order.email}</span>
+                                </div>
+                                <div className="col-span-2">
+                                  <span className="text-gray-500 text-xs block">Address</span>
+                                  <span className="font-medium">{order.address}</span>
+                                </div>
+                              </div>
+                              <div>
+                                <span className="text-gray-500 text-xs block mb-1">Items</span>
+                                <div className="flex flex-wrap gap-2">
+                                  {order.items.map((item, idx) => (
+                                    <span key={idx} className="bg-white border rounded px-2 py-1 text-xs">
+                                      {item.fruitName} — {item.quantityKg}kg × {formatPrice(item.price)} TND
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
                   )
                 })}
               </tbody>
@@ -95,53 +296,130 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
           </div>
 
           {/* Mobile Cards */}
-          <div className="md:hidden space-y-4">
-            {completedOrders.map((order) => {
+          <div className="md:hidden space-y-2">
+            {pagedOrders.map((order) => {
               const config = STATUS_CONFIG[order.status as keyof typeof STATUS_CONFIG]
+              const isExpanded = expandedId === order.id
               return (
                 <div
                   key={order.id}
-                  className={`border rounded-lg p-4 shadow-sm ${config?.border ?? ""} ${config?.row ?? ""}`}
+                  className={`border rounded-lg overflow-hidden ${config?.border ?? ""} ${config?.row ?? ""}`}
                 >
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="font-bold text-lg">
-                      {order.customerName}
-                    </h3>
-                    <span
-                      className={`px-2 py-1 rounded text-white text-xs font-semibold ${config?.bg ?? "bg-gray-600"}`}
-                    >
-                      {config?.label ?? order.status}
-                    </span>
-                  </div>
-
-                  <div className="text-sm space-y-1 mb-3">
-                    <div className="flex items-start">
-                      <span className="font-semibold w-16">Phone:</span>
-                      <span className="text-gray-700">{order.phone}</span>
+                  {/* Collapsed summary */}
+                  <button
+                    type="button"
+                    className="w-full flex items-center justify-between px-3 py-2.5 text-left"
+                    onClick={() => setExpandedId(isExpanded ? null : order.id ?? null)}
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-gray-400 text-xs">{isExpanded ? "▼" : "▶"}</span>
+                      <span className="font-medium truncate">{order.customerName}</span>
                     </div>
-                  </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="font-semibold text-sm">{formatPrice(order.totalPrice)}</span>
+                      <span className={`px-1.5 py-0.5 rounded text-white text-xs ${config?.bg ?? "bg-gray-600"}`}>
+                        {config?.label ?? order.status}
+                      </span>
+                    </div>
+                  </button>
 
-                  <div className="mb-3">
-                    <p className="font-semibold text-sm mb-1">Items:</p>
-                    <ul className="text-sm space-y-1">
-                      {order.items.map((item, idx) => (
-                        <li key={idx} className="text-gray-700">
-                          • {item.fruitName} - {item.quantityKg}kg
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div>
-                    <span className="font-semibold text-sm">Total: </span>
-                    <span className="font-bold text-lg text-green-600">
-                      {formatPrice(order.totalPrice)} TND
-                    </span>
-                  </div>
+                  {/* Expanded details */}
+                  {isExpanded && (
+                    <div className="border-t px-3 py-3 space-y-2 text-sm bg-white/60">
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <span className="text-gray-500 text-xs block">Phone</span>
+                          <span>{order.phone}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-500 text-xs block">Email</span>
+                          <span className="break-all">{order.email}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-500 text-xs block">Date</span>
+                          <span>{formatDate(order.createdAt)}</span>
+                        </div>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 text-xs block">Address</span>
+                        <span>{order.address}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 text-xs block mb-1">Items</span>
+                        <ul className="space-y-1">
+                          {order.items.map((item, idx) => (
+                            <li key={idx} className="text-gray-700">
+                              • {item.fruitName} — {item.quantityKg}kg × {formatPrice(item.price)} TND
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )
             })}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between mt-4 text-sm">
+              <span className="text-gray-500">
+                Page {safePage} of {totalPages}
+              </span>
+              <div className="flex gap-1">
+                <button
+                  onClick={() => setPage(1)}
+                  disabled={safePage === 1}
+                  className="px-2 py-1 border rounded disabled:opacity-30 hover:bg-gray-100"
+                >
+                  ««
+                </button>
+                <button
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={safePage === 1}
+                  className="px-2 py-1 border rounded disabled:opacity-30 hover:bg-gray-100"
+                >
+                  ‹
+                </button>
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum: number
+                  if (totalPages <= 5) {
+                    pageNum = i + 1
+                  } else if (safePage <= 3) {
+                    pageNum = i + 1
+                  } else if (safePage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i
+                  } else {
+                    pageNum = safePage - 2 + i
+                  }
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setPage(pageNum)}
+                      className={`px-2.5 py-1 border rounded ${safePage === pageNum ? "bg-gray-800 text-white" : "hover:bg-gray-100"}`}
+                    >
+                      {pageNum}
+                    </button>
+                  )
+                })}
+                <button
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={safePage === totalPages}
+                  className="px-2 py-1 border rounded disabled:opacity-30 hover:bg-gray-100"
+                >
+                  ›
+                </button>
+                <button
+                  onClick={() => setPage(totalPages)}
+                  disabled={safePage === totalPages}
+                  className="px-2 py-1 border rounded disabled:opacity-30 hover:bg-gray-100"
+                >
+                  »»
+                </button>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>
