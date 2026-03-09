@@ -49,7 +49,7 @@ export default function FruitsManagement() {
   }
 
   const deleteFruit = async (fruit: Fruit) => {
-    if (!confirm(`Are you sure you want to delete "${fruit.name}"?`)) return
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer "${fruit.name}" ?`)) return
     await deleteDoc(doc(db, "fruits", fruit.id))
     setFruits(fruits.filter((f) => f.id !== fruit.id))
   }
@@ -109,18 +109,18 @@ export default function FruitsManagement() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Fruits Inventory</h2>
+        <h2 className="text-2xl font-bold">Inventaire des Fruits</h2>
         <button
           onClick={() => setModalData({ mode: "add" })}
           className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-1"
         >
-          <AddIcon fontSize="small" /> Add New Fruit
+          <AddIcon fontSize="small" /> Ajouter un Fruit
         </button>
       </div>
 
       {fruits.length === 0 ? (
         <p className="text-gray-500 italic text-center py-8">
-          No fruits added yet. Click &ldquo;Add New Fruit&rdquo; to get started.
+          Aucun fruit ajouté. Cliquez sur &ldquo;Ajouter un Fruit&rdquo; pour commencer.
         </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -147,7 +147,7 @@ export default function FruitsManagement() {
                         : "bg-gray-500 text-white"
                     }`}
                   >
-                    {fruit.isAvailable ? "Available" : "Unavailable"}
+                    {fruit.isAvailable ? "Disponible" : "Indisponible"}
                   </span>
                 </div>
               </div>
@@ -157,7 +157,7 @@ export default function FruitsManagement() {
 
                 <div className="mb-4 flex-grow">
                   <p className="text-sm font-semibold text-gray-600 mb-1">
-                    Price Options:
+                    Options de Prix :
                   </p>
                   <div className="space-y-1">
                     {fruit.options.map((option, idx) => (
@@ -180,19 +180,19 @@ export default function FruitsManagement() {
                         : "bg-green-600 text-white hover:bg-green-700"
                     }`}
                   >
-                    {fruit.isAvailable ? <><ToggleOffIcon fontSize="small" /> Disable</> : <><ToggleOnIcon fontSize="small" /> Enable</>}
+                    {fruit.isAvailable ? <><ToggleOffIcon fontSize="small" /> Désactiver</> : <><ToggleOnIcon fontSize="small" /> Activer</>}
                   </button>
                   <button
                     onClick={() => setModalData({ mode: "edit", fruit })}
                     className="flex items-center justify-center gap-1 bg-blue-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-blue-700 transition-colors"
                   >
-                    <EditIcon fontSize="small" /> Edit
+                    <EditIcon fontSize="small" /> Modifier
                   </button>
                   <button
                     onClick={() => deleteFruit(fruit)}
                     className="flex items-center justify-center gap-1 bg-red-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-red-700 transition-colors"
                   >
-                    <DeleteIcon fontSize="small" /> Delete
+                    <DeleteIcon fontSize="small" /> Supprimer
                   </button>
                 </div>
               </div>

@@ -48,19 +48,19 @@ export default function OrderEditForm({
       onClose()
     } catch (error) {
       console.error("Error updating order:", error)
-      alert("Failed to update order")
+      alert("Échec de la mise à jour de la commande")
     }
   }
 
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
       <div className="bg-white p-6 rounded shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <h3 className="text-xl font-bold mb-4">Edit Order Details</h3>
+        <h3 className="text-xl font-bold mb-4">Modifier les Détails de la Commande</h3>
 
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">
-              Customer Name
+              Nom du Client
             </label>
             <input
               type="text"
@@ -85,7 +85,7 @@ export default function OrderEditForm({
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Phone</label>
+            <label className="block text-sm font-medium mb-1">Téléphone</label>
             <input
               type="tel"
               value={formData.phone}
@@ -97,7 +97,7 @@ export default function OrderEditForm({
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Address</label>
+            <label className="block text-sm font-medium mb-1">Adresse</label>
             <textarea
               value={formData.address}
               onChange={(e) =>
@@ -110,7 +110,7 @@ export default function OrderEditForm({
 
           <div>
             <label className="block text-sm font-medium mb-2">
-              Delivery Location
+              Lieu de Livraison
             </label>
             <AddressMap
               lat={location.lat}
@@ -119,7 +119,7 @@ export default function OrderEditForm({
               onLocationSelect={setLocation}
             />
             <p className="text-xs text-gray-500 mt-2">
-              Coordinates: {location.lat.toFixed(4)},{" "}
+              Coordonnées : {location.lat.toFixed(4)},{" "}
               {location.lng.toFixed(4)}
             </p>
           </div>
@@ -130,13 +130,13 @@ export default function OrderEditForm({
             onClick={onClose}
             className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
           >
-            Cancel
+            Annuler
           </button>
           <button
             onClick={handleSave}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
-            Save Changes
+            Enregistrer
           </button>
         </div>
       </div>

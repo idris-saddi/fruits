@@ -22,7 +22,7 @@ export default function OrderSummary({ items, total }: OrderSummaryProps) {
     <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 h-fit sticky top-8 mb-24 lg:mb-0">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
         <InventoryIcon fontSize="large" />
-        Order Summary
+        Récapitulatif de Commande
       </h2>
 
       <div className="space-y-4 mb-6">
@@ -47,7 +47,7 @@ export default function OrderSummary({ items, total }: OrderSummaryProps) {
       <div className="bg-gradient-to-r from-rose-50 to-orange-50 rounded-2xl p-6 border-2 border-rose-200">
         <div className="flex justify-between items-center">
           <span className="text-lg font-semibold text-gray-700">
-            Total Amount
+            Montant Total
           </span>
           <span className="text-3xl font-bold text-rose-600">
             {formatPrice(total)} TND
@@ -58,15 +58,15 @@ export default function OrderSummary({ items, total }: OrderSummaryProps) {
       <div className="mt-6 space-y-3 text-sm text-gray-600">
         <div className="flex items-center gap-2">
           <CheckCircleIcon sx={{ fontSize: 18, color: "#22c55e" }} />
-          <span>Free delivery on orders over 100 TND</span>
+          <span>Livraison gratuite pour les commandes de plus de 100 TND</span>
         </div>
         <div className="flex items-center gap-2">
           <CheckCircleIcon sx={{ fontSize: 18, color: "#22c55e" }} />
-          <span>Fresh fruits guarantee</span>
+          <span>Fruits frais garantis</span>
         </div>
         <div className="flex items-center gap-2">
           <CheckCircleIcon sx={{ fontSize: 18, color: "#22c55e" }} />
-          <span>24h delivery in Tunis area</span>
+          <span>Livraison en 24h dans la région de Tunis</span>
         </div>
       </div>
     </div>

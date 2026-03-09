@@ -48,7 +48,7 @@ export default function FloatingCart() {
               </div>
               <div>
                 <p className="text-xs md:text-sm text-white/90 font-medium">
-                  {totalItems} item{totalItems !== 1 ? "s" : ""}
+                  {totalItems} article{totalItems !== 1 ? "s" : ""}
                 </p>
                 <p className="text-lg md:text-xl font-bold">
                   {formatPrice(total())} TND
@@ -60,8 +60,8 @@ export default function FloatingCart() {
               onClick={() => setOpen(true)}
               className="bg-white text-rose-600 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-bold hover:bg-gray-50 active:scale-98 transition-all shadow-lg hover:shadow-xl text-sm md:text-base shrink-0 ml-2 touch-manipulation"
             >
-              <span className="hidden sm:inline">View Cart</span>
-              <span className="sm:hidden">View</span>
+              <span className="hidden sm:inline">Voir le Panier</span>
+              <span className="sm:hidden">Voir</span>
             </button>
           </div>
         </div>
@@ -85,16 +85,16 @@ export default function FloatingCart() {
                 <div>
                   <h2 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
                     <ShoppingBagIcon sx={{ fontSize: { xs: 28, md: 32 } }} />
-                    Your Cart
+                    Votre Panier
                   </h2>
                   <p className="text-gray-500 text-sm mt-1">
-                    {totalItems} item{totalItems !== 1 ? "s" : ""} selected
+                    {totalItems} article{totalItems !== 1 ? "s" : ""} sélectionné{totalItems !== 1 ? "s" : ""}
                   </p>
                 </div>
                 <button
                   onClick={() => setOpen(false)}
                   className="text-gray-400 hover:text-gray-600 active:text-gray-700 text-3xl md:text-4xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
-                  aria-label="Close cart"
+                  aria-label="Fermer le panier"
                 >
                   <CloseIcon />
                 </button>
@@ -112,7 +112,7 @@ export default function FloatingCart() {
                           {item.fruitName}
                         </p>
                         <p className="text-xs md:text-sm text-gray-500 mt-1">
-                          {item.quantityKg}kg × {item.blocks} block
+                          {item.quantityKg}kg × {item.blocks} bloc
                           {item.blocks !== 1 ? "s" : ""}
                         </p>
                       </div>
@@ -149,7 +149,7 @@ export default function FloatingCart() {
                         }
                         className="ml-auto text-red-400 hover:text-red-600 text-sm font-medium transition-colors"
                       >
-                        Remove
+                        Supprimer
                       </button>
                     </div>
                   </div>
@@ -159,7 +159,7 @@ export default function FloatingCart() {
               <div className="mt-6 md:mt-8 bg-gradient-to-r from-rose-50 to-orange-50 rounded-2xl p-5 md:p-6 border-2 border-rose-200 sticky bottom-0 md:static">
                 <div className="flex justify-between items-center mb-4 md:mb-6">
                   <span className="text-gray-600 font-medium text-sm md:text-base">
-                    Total Amount
+                    Montant Total
                   </span>
                   <span className="text-2xl md:text-3xl font-bold text-rose-600">
                     {formatPrice(total())} TND
@@ -173,7 +173,7 @@ export default function FloatingCart() {
                   }}
                   className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 active:scale-98 text-white py-3.5 md:py-4 rounded-xl font-bold text-base md:text-lg shadow-lg hover:shadow-xl transition-all touch-manipulation"
                 >
-                  Proceed to Checkout
+                  Passer la Commande
                 </button>
 
                 <div className="flex gap-2 md:gap-3 mt-3 md:mt-4">
@@ -181,13 +181,13 @@ export default function FloatingCart() {
                     onClick={() => setOpen(false)}
                     className="flex-1 border-2 border-gray-300 px-3 md:px-4 py-2.5 md:py-3 rounded-xl font-semibold hover:bg-gray-50 active:bg-gray-100 transition-colors text-sm md:text-base touch-manipulation"
                   >
-                    Continue Shopping
+                    Continuer les Achats
                   </button>
                   <button
                     onClick={handleClearCart}
                     className="flex-1 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white px-3 md:px-4 py-2.5 md:py-3 rounded-xl font-semibold transition-colors text-sm md:text-base touch-manipulation"
                   >
-                    Clear Cart
+                    Vider le Panier
                   </button>
                 </div>
               </div>

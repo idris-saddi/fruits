@@ -75,20 +75,20 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
       if (result) {
         setLocation({ lat: result.lat, lng: result.lng })
         showToast({
-          message: "Location found on map!",
+          message: "Emplacement trouvé sur la carte !",
           type: "success",
           duration: 2000,
         })
       } else {
         showToast({
-          message: "Could not find location. Please check the address.",
+          message: "Impossible de trouver l'emplacement. Vérifiez l'adresse.",
           type: "error",
           duration: 3000,
         })
       }
     } catch {
       showToast({
-        message: "Failed to locate address.",
+          message: "Échec de la localisation.",
         type: "error",
         duration: 3000,
       })
@@ -106,7 +106,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
       } else {
         showToast({
           message:
-            "Could not determine location. Please verify your address.",
+            "Impossible de déterminer l'emplacement. Vérifiez votre adresse.",
           type: "error",
           duration: 3000,
         })
@@ -122,7 +122,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
       {ToastComponent}
       <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
         <EditNoteIcon fontSize="large" />
-        Delivery Information
+        Informations de Livraison
       </h2>
 
       <form
@@ -131,37 +131,37 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
       >
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Full Name
+            Nom Complet
           </label>
           <input
-            placeholder="John Doe"
+            placeholder="Jean Dupont"
             {...register("customerName")}
             className="w-full border-2 border-gray-200 focus:border-rose-500 p-4 rounded-xl outline-none transition-colors"
           />
           {errors.customerName && (
-            <p className="text-red-500 text-sm mt-1 flex items-center gap-1"><ErrorOutlineIcon sx={{ fontSize: 16 }} /> Name is required</p>
+            <p className="text-red-500 text-sm mt-1 flex items-center gap-1"><ErrorOutlineIcon sx={{ fontSize: 16 }} /> Le nom est requis</p>
           )}
         </div>
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Email Address
+            Adresse Email
           </label>
           <input
-            placeholder="john@example.com"
+            placeholder="jean@exemple.com"
             {...register("email")}
             className="w-full border-2 border-gray-200 focus:border-rose-500 p-4 rounded-xl outline-none transition-colors"
           />
           {errors.email && (
             <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-              <ErrorOutlineIcon sx={{ fontSize: 16 }} /> Valid email required
+              <ErrorOutlineIcon sx={{ fontSize: 16 }} /> Email valide requis
             </p>
           )}
         </div>
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Phone Number
+            Numéro de Téléphone
           </label>
           <input
             placeholder="+216 XX XXX XXX"
@@ -170,31 +170,31 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
           />
           {errors.phone && (
             <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-              <ErrorOutlineIcon sx={{ fontSize: 16 }} /> Phone number required
+              <ErrorOutlineIcon sx={{ fontSize: 16 }} /> Numéro de téléphone requis
             </p>
           )}
         </div>
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Delivery Address
+            Adresse de Livraison
           </label>
           <textarea
-            placeholder="Street, City, Postal Code"
+            placeholder="Rue, Ville, Code Postal"
             {...register("address")}
             rows={3}
             className="w-full border-2 border-gray-200 focus:border-rose-500 p-4 rounded-xl outline-none transition-colors resize-none"
           />
           {errors.address && (
             <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-              <ErrorOutlineIcon sx={{ fontSize: 16 }} /> Address is required
+              <ErrorOutlineIcon sx={{ fontSize: 16 }} /> L'adresse est requise
             </p>
           )}
 
           {showMap && (
             <div className="mt-4">
               <p className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
-                <LocationOnIcon sx={{ fontSize: 18 }} /> Delivery Location - Click to adjust
+                <LocationOnIcon sx={{ fontSize: 18 }} /> Lieu de Livraison - Cliquez pour ajuster
               </p>
               {location ? (
                 <AddressMap
@@ -207,7 +207,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                 <div className="w-full h-[300px] rounded-xl overflow-hidden border-2 border-gray-200 flex items-center justify-center bg-gray-50">
                   <div className="text-center text-gray-500">
                     <LocationOnIcon sx={{ fontSize: 40, mb: 1 }} />
-                    <p>Locating address...</p>
+                    <p>Localisation en cours...</p>
                   </div>
                 </div>
               )}
@@ -217,7 +217,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
           {isGeocoding && (
             <div className="mt-2 text-sm text-gray-500 flex items-center gap-2">
               <HourglassEmptyIcon className="animate-spin" sx={{ fontSize: 16 }} />
-              <span>Finding location on map...</span>
+              <span>Recherche de l'emplacement...</span>
             </div>
           )}
         </div>
@@ -227,7 +227,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
           disabled={isSubmitting}
           className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 disabled:from-gray-400 disabled:to-gray-400 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all mt-8"
         >
-          {isSubmitting ? <><HourglassEmptyIcon sx={{ fontSize: 20 }} /> Processing...</> : "Place Order"}
+          {isSubmitting ? <><HourglassEmptyIcon sx={{ fontSize: 20 }} /> Traitement en cours...</> : "Passer la Commande"}
         </button>
       </form>
     </div>

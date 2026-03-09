@@ -22,7 +22,7 @@ function AdminLoginContent() {
 
   useEffect(() => {
     if (searchParams.get("error") === "unauthorized") {
-      setError("Access denied. Your account is not authorized as an admin.")
+      setError("Accès refusé. Votre compte n'est pas autorisé en tant qu'administrateur.")
     }
   }, [searchParams])
 
@@ -31,7 +31,7 @@ function AdminLoginContent() {
       await signInWithPopup(auth, googleProvider)
       router.push("/admin/dashboard")
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Google sign-in failed")
+      setError(err instanceof Error ? err.message : "Échec de la connexion Google")
     }
   }
 
@@ -39,7 +39,7 @@ function AdminLoginContent() {
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="bg-secondary p-8 rounded-xl shadow-lg w-full max-w-md">
         <h1 className="text-2xl font-bold mb-6 text-foreground">
-          Admin Login
+          Connexion Admin
         </h1>
 
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -68,7 +68,7 @@ function AdminLoginContent() {
             />
           </svg>
           <span className="text-foreground font-medium">
-            Sign in with Google
+            Se connecter avec Google
           </span>
         </button>
       </div>

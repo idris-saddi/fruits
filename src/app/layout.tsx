@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Fruits OK",
-  description: "Seasonal fruits delivery service in Tunisia",
+  description: "Service de livraison de fruits de saison en Tunisie",
 }
 
 export default function RootLayout({

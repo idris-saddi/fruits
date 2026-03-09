@@ -15,11 +15,11 @@ import { useToast } from "@/shared/hooks/use-toast"
 type Tab = "review" | "progress" | "delivery" | "history" | "fruits"
 
 const TABS: { key: Tab; label: string; shortLabel?: string }[] = [
-  { key: "review", label: "Orders in Review", shortLabel: "Review" },
-  { key: "progress", label: "In Progress", shortLabel: "Progress" },
-  { key: "delivery", label: "Delivery Map", shortLabel: "Delivery" },
-  { key: "history", label: "History" },
-  { key: "fruits", label: "Fruits Management", shortLabel: "Fruits" },
+  { key: "review", label: "Commandes en Attente", shortLabel: "Attente" },
+  { key: "progress", label: "En Cours", shortLabel: "En Cours" },
+  { key: "delivery", label: "Carte de Livraison", shortLabel: "Livraison" },
+  { key: "history", label: "Historique" },
+  { key: "fruits", label: "Gestion des Fruits", shortLabel: "Fruits" },
 ]
 
 export default function AdminDashboard() {
@@ -32,7 +32,7 @@ export default function AdminDashboard() {
       .then(setOrders)
       .catch(() => {
         showToast({
-          message: "Missing or insufficient permissions. Please contact an administrator.",
+          message: "Permissions manquantes ou insuffisantes. Veuillez contacter un administrateur.",
           type: "error",
         })
       })
@@ -52,13 +52,13 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
           <div className="flex justify-between items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
-              Admin Dashboard
+              Tableau de Bord Admin
             </h1>
             <button
               onClick={() => signOut(auth)}
               className="bg-red-600 text-white px-3 sm:px-4 py-2 rounded hover:bg-red-700 text-sm sm:text-base whitespace-nowrap"
             >
-              Logout
+              Déconnexion
             </button>
           </div>
         </div>

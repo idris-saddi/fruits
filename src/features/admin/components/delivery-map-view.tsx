@@ -50,17 +50,17 @@ export function DeliveryMapView({
                 </h3>
 
                 <div className="mb-2">
-                  <p className="text-sm font-semibold">Phone:</p>
+                  <p className="text-sm font-semibold">Téléphone :</p>
                   <p className="text-sm">{order.phone}</p>
                 </div>
 
                 <div className="mb-2">
-                  <p className="text-sm font-semibold">Address:</p>
+                  <p className="text-sm font-semibold">Adresse :</p>
                   <p className="text-sm">{order.address}</p>
                 </div>
 
                 <div className="mb-2">
-                  <p className="text-sm font-semibold">Items:</p>
+                  <p className="text-sm font-semibold">Articles :</p>
                   <ul className="text-sm">
                     {order.items.map((item, idx) => (
                       <li key={idx}>
@@ -83,7 +83,7 @@ export function DeliveryMapView({
                         onClick={() => onEditOrder(order)}
                         className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 flex-1 text-sm"
                       >
-                        Edit Location
+                        Modifier l'Emplacement
                       </button>
                     )}
                     <button
@@ -92,7 +92,7 @@ export function DeliveryMapView({
                       }
                       className="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 flex-1 text-sm"
                     >
-                      Delivered
+                      Livré
                     </button>
                   </div>
                   <button
@@ -101,7 +101,7 @@ export function DeliveryMapView({
                     }
                     className="bg-orange-600 text-white px-3 py-2 rounded hover:bg-orange-700 w-full text-sm"
                   >
-                    Client Didn&apos;t Show Up (Return)
+                    Client Absent (Retour)
                   </button>
                 </div>
               </div>

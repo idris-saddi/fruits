@@ -30,15 +30,15 @@ export default function OrdersInProgress({
   return (
     <div>
       <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">
-        Orders In Progress
+        Commandes En Cours
       </h2>
       <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
-        Confirmed orders being prepared. Mark as ready when prepared for
-        delivery.
+        Commandes confirmées en préparation. Marquez comme prêt lorsque préparé pour
+        la livraison.
       </p>
 
       {confirmedOrders.length === 0 ? (
-        <p className="text-gray-500 italic">No orders in progress</p>
+        <p className="text-gray-500 italic">Aucune commande en cours</p>
       ) : (
         <>
           {/* Desktop Table */}
@@ -46,10 +46,10 @@ export default function OrdersInProgress({
             <table className="w-full border border-gray-300">
               <thead className="bg-gray-800 text-white">
                 <tr>
-                  <th className="p-3 text-left">Customer</th>
-                  <th className="p-3 text-left">Phone</th>
-                  <th className="p-3 text-left">Address</th>
-                  <th className="p-3 text-left">Items</th>
+                  <th className="p-3 text-left">Client</th>
+                  <th className="p-3 text-left">Téléphone</th>
+                  <th className="p-3 text-left">Adresse</th>
+                  <th className="p-3 text-left">Articles</th>
                   <th className="p-3 text-left">Total (TND)</th>
                   <th className="p-3 text-left">Actions</th>
                 </tr>
@@ -78,7 +78,7 @@ export default function OrdersInProgress({
                           onClick={() => setEditingOrder(order)}
                           className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm"
                         >
-                          Edit
+                          Modifier
                         </button>
                         <button
                           onClick={() =>
@@ -86,7 +86,7 @@ export default function OrdersInProgress({
                           }
                           className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 text-sm"
                         >
-                          Mark as Ready
+                          Marquer Prêt
                         </button>
                         <button
                           onClick={() =>
@@ -94,7 +94,7 @@ export default function OrdersInProgress({
                           }
                           className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm"
                         >
-                          Cancel Order
+                          Annuler la Commande
                         </button>
                       </div>
                     </td>
@@ -116,17 +116,17 @@ export default function OrdersInProgress({
                 </h3>
                 <div className="text-sm space-y-1 mb-3">
                   <div className="flex items-start">
-                    <span className="font-semibold w-20">Phone:</span>
+                    <span className="font-semibold w-20">Téléphone :</span>
                     <span className="text-gray-700">{order.phone}</span>
                   </div>
                   <div className="flex items-start">
-                    <span className="font-semibold w-20">Address:</span>
+                    <span className="font-semibold w-20">Adresse :</span>
                     <span className="text-gray-700">{order.address}</span>
                   </div>
                 </div>
 
                 <div className="mb-3">
-                  <p className="font-semibold text-sm mb-1">Items:</p>
+                  <p className="font-semibold text-sm mb-1">Articles :</p>
                   <ul className="text-sm space-y-1">
                     {order.items.map((item, idx) => (
                       <li key={idx} className="text-gray-700">
@@ -137,7 +137,7 @@ export default function OrdersInProgress({
                 </div>
 
                 <div className="mb-3">
-                  <span className="font-semibold text-sm">Total: </span>
+                  <span className="font-semibold text-sm">Total : </span>
                   <span className="font-bold text-lg text-green-600">
                     {formatPrice(order.totalPrice)} TND
                   </span>
@@ -148,13 +148,13 @@ export default function OrdersInProgress({
                     onClick={() => setEditingOrder(order)}
                     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-medium"
                   >
-                    Edit
+                    Modifier
                   </button>
                   <button
                     onClick={() => handleStatusChange(order.id!, "ready")}
                     className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm font-medium"
                   >
-                    Mark as Ready
+                    Marquer Prêt
                   </button>
                   <button
                     onClick={() =>
@@ -162,7 +162,7 @@ export default function OrdersInProgress({
                     }
                     className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 text-sm font-medium"
                   >
-                    Cancel Order
+                    Annuler la Commande
                   </button>
                 </div>
               </div>

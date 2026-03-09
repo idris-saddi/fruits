@@ -21,7 +21,7 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (items.length === 0 && !isRedirecting) {
       showToast({
-        message: "Your cart is empty!",
+        message: "Votre panier est vide !",
         type: "info",
         duration: 2000,
       })
@@ -56,7 +56,7 @@ export default function CheckoutPage() {
       clearCart()
 
       showToast({
-        message: "Order placed successfully!",
+        message: "Commande passée avec succès !",
         type: "success",
         duration: 3000,
       })
@@ -64,7 +64,7 @@ export default function CheckoutPage() {
       router.push("/")
     } catch {
       showToast({
-        message: "Failed to place order. Please try again.",
+        message: "Échec de la commande. Veuillez réessayer.",
         type: "error",
         duration: 4000,
       })
@@ -77,9 +77,9 @@ export default function CheckoutPage() {
       <div className="max-w-4xl mx-auto px-6">
         <div className="text-center mb-12">
           <div className="text-6xl mb-4">🛒</div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">Checkout</h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">Commande</h1>
           <p className="text-gray-600">
-            Complete your order in just a few steps
+            Finalisez votre commande en quelques étapes
           </p>
         </div>
 

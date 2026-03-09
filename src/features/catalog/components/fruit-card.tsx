@@ -62,7 +62,7 @@ export default function FruitCard({ fruit }: FruitCardProps) {
       {showSuccess && (
         <div className="absolute top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 animate-bounce">
           <CheckCircleIcon fontSize="small" />
-          <span className="font-medium">Added!</span>
+          <span className="font-medium">Ajouté !</span>
         </div>
       )}
     </div>

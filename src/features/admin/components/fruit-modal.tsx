@@ -54,15 +54,15 @@ export default function FruitModal({
 
   const handleSave = () => {
     if (!name.trim()) {
-      alert("Please enter a fruit name")
+      alert("Veuillez entrer un nom de fruit")
       return
     }
     if (!pictureUrl.trim()) {
-      alert("Please enter an image URL")
+      alert("Veuillez entrer une URL d'image")
       return
     }
     if (options.some((o) => o.quantityKg <= 0 || o.price <= 0)) {
-      alert("All quantities and prices must be greater than 0")
+      alert("Toutes les quantités et prix doivent être supérieurs à 0")
       return
     }
     onSave({ name, pictureUrl, options })
@@ -74,17 +74,17 @@ export default function FruitModal({
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <h3 className="text-xl font-bold mb-4">
           {mode === "add"
-            ? "Add New Fruit"
-            : `Edit ${fruit?.name || "Fruit"}`}
+            ? "Ajouter un Fruit"
+            : `Modifier ${fruit?.name || "Fruit"}`}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium mb-1">
-              Fruit Name *
+              Nom du Fruit *
             </label>
             <input
-              placeholder="e.g., Orange, Apple, Banana"
+              placeholder="ex: Orange, Pomme, Banane"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full border border-gray-300 p-2 rounded"
@@ -92,7 +92,7 @@ export default function FruitModal({
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">
-              Image URL *
+              URL de l'Image *
             </label>
             <input
               placeholder="https://..."
@@ -105,7 +105,7 @@ export default function FruitModal({
 
         {pictureUrl && (
           <div className="mb-4">
-            <p className="text-sm font-medium mb-2">Image Preview:</p>
+            <p className="text-sm font-medium mb-2">Aperçu de l'image :</p>
             <img
               src={pictureUrl}
               alt="Preview"
@@ -119,7 +119,7 @@ export default function FruitModal({
 
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2">
-            Price Options *
+            Options de Prix *
           </label>
           <div className="space-y-3 max-h-[300px] overflow-y-auto">
             {options.map((option, index) => (
@@ -129,7 +129,7 @@ export default function FruitModal({
               >
                 <div className="flex-1">
                   <label className="block text-xs text-gray-600 mb-1">
-                    Quantity (kg)
+                    Quantité (kg)
                   </label>
                   <input
                     type="number"
@@ -144,7 +144,7 @@ export default function FruitModal({
                 </div>
                 <div className="flex-1">
                   <label className="block text-xs text-gray-600 mb-1">
-                    Price (TND)
+                    Prix (TND)
                   </label>
                   <input
                     type="number"
@@ -165,7 +165,7 @@ export default function FruitModal({
                   onClick={() => removeOption(index)}
                   disabled={options.length === 1}
                   className="mt-5 bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
-                  title="Remove option"
+                  title="Supprimer l'option"
                 >
                   <CloseIcon fontSize="small" />
                 </button>
@@ -176,7 +176,7 @@ export default function FruitModal({
             onClick={addOption}
             className="w-full mt-2 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 flex items-center justify-center gap-1"
           >
-            <AddCircleOutlineIcon fontSize="small" /> Add Another Option
+            <AddCircleOutlineIcon fontSize="small" /> Ajouter une Option
           </button>
         </div>
 
@@ -185,13 +185,13 @@ export default function FruitModal({
             onClick={onClose}
             className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
           >
-            Cancel
+            Annuler
           </button>
           <button
             onClick={handleSave}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
-            {mode === "add" ? "Add Fruit" : "Save Changes"}
+            {mode === "add" ? "Ajouter le Fruit" : "Enregistrer"}
           </button>
         </div>
       </div>

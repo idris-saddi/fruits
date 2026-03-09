@@ -18,9 +18,9 @@ interface OrdersHistoryProps {
 }
 
 const STATUS_CONFIG = {
-  delivered: { label: "Delivered", bg: "bg-green-600", row: "bg-green-50", border: "border-green-300" },
-  canceled: { label: "Canceled", bg: "bg-red-600", row: "bg-red-50", border: "border-red-300" },
-  returned: { label: "Returned", bg: "bg-orange-600", row: "bg-orange-50", border: "border-orange-300" },
+  delivered: { label: "Livré", bg: "bg-green-600", row: "bg-green-50", border: "border-green-300" },
+  canceled: { label: "Annulé", bg: "bg-red-600", row: "bg-red-50", border: "border-red-300" },
+  returned: { label: "Retourné", bg: "bg-orange-600", row: "bg-orange-50", border: "border-orange-300" },
 } as const
 
 type StatusFilter = "all" | "delivered" | "canceled" | "returned"
@@ -31,7 +31,7 @@ const PAGE_SIZES = [10, 25, 50]
 function formatDate(date?: Date) {
   if (!date) return "—"
   const d = date instanceof Date ? date : new Date((date as unknown as { seconds: number }).seconds * 1000)
-  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
+  return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" })
 }
 
 export default function OrdersHistory({ orders }: OrdersHistoryProps) {
@@ -141,8 +141,8 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
 
   return (
     <div>
-      <h2 className="text-xl sm:text-2xl font-bold mb-1">Order History</h2>
-      <p className="text-sm text-gray-500 mb-4">Completed, canceled, and returned orders.</p>
+      <h2 className="text-xl sm:text-2xl font-bold mb-1">Historique des Commandes</h2>
+      <p className="text-sm text-gray-500 mb-4">Commandes livrées, annulées et retournées.</p>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-5">
@@ -152,23 +152,23 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
         </div>
         <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
           <div className="text-2xl font-bold text-green-700">{stats.delivered}</div>
-          <div className="text-xs text-green-600">Delivered</div>
+          <div className="text-xs text-green-600">Livré</div>
         </div>
         <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-center">
           <div className="text-2xl font-bold text-red-700">{stats.canceled}</div>
-          <div className="text-xs text-red-600">Canceled</div>
+          <div className="text-xs text-red-600">Annulé</div>
         </div>
         <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-center">
           <div className="text-2xl font-bold text-orange-700">{stats.returned}</div>
-          <div className="text-xs text-orange-600">Returned</div>
+          <div className="text-xs text-orange-600">Retourné</div>
         </div>
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
           <div className="text-2xl font-bold text-blue-700">{formatPrice(stats.totalRevenue)}</div>
-          <div className="text-xs text-blue-600">Revenue (TND)</div>
+          <div className="text-xs text-blue-600">Revenus (TND)</div>
         </div>
         <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 text-center">
           <div className="text-2xl font-bold text-purple-700">{formatPrice(stats.avgOrderValue)}</div>
-          <div className="text-xs text-purple-600">Avg Order (TND)</div>
+          <div className="text-xs text-purple-600">Moy. Commande (TND)</div>
         </div>
       </div>
 
@@ -176,7 +176,7 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
       <div className="flex flex-col sm:flex-row gap-2 mb-4">
         <input
           type="text"
-          placeholder="Search name, phone, item..."
+          placeholder="Rechercher nom, téléphone, article..."
           value={search}
           onChange={(e) => handleFilterChange(() => setSearch(e.target.value))}
           className="border rounded-lg px-3 py-2 text-sm flex-1 min-w-0"
@@ -186,10 +186,10 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
           onChange={(e) => handleFilterChange(() => setStatusFilter(e.target.value as StatusFilter))}
           className="border rounded-lg px-3 py-2 text-sm bg-white"
         >
-          <option value="all">All Statuses</option>
-          <option value="delivered">Delivered</option>
-          <option value="canceled">Canceled</option>
-          <option value="returned">Returned</option>
+          <option value="all">Tous les Statuts</option>
+          <option value="delivered">Livré</option>
+          <option value="canceled">Annulé</option>
+          <option value="returned">Retourné</option>
         </select>
         <select
           value={pageSize}
@@ -204,11 +204,11 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
 
       {/* Results count */}
       <div className="text-xs text-gray-500 mb-2">
-        {processedOrders.length} order{processedOrders.length !== 1 ? "s" : ""} found
+        {processedOrders.length} commande{processedOrders.length !== 1 ? "s" : ""} trouvée{processedOrders.length !== 1 ? "s" : ""}
       </div>
 
       {processedOrders.length === 0 ? (
-        <p className="text-gray-500 italic py-8 text-center">No orders match your filters</p>
+        <p className="text-gray-500 italic py-8 text-center">Aucune commande ne correspond à vos filtres</p>
       ) : (
         <>
           {/* Desktop Table */}
@@ -221,13 +221,13 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
                     className="p-2.5 text-left cursor-pointer select-none hover:bg-gray-700"
                     onClick={() => toggleSort("customer")}
                   >
-                    Customer {sortIcon("customer")}
+                    Client {sortIcon("customer")}
                   </th>
                   <th
                     className="p-2.5 text-left cursor-pointer select-none hover:bg-gray-700"
                     onClick={() => toggleSort("items")}
                   >
-                    Items {sortIcon("items")}
+                    Articles {sortIcon("items")}
                   </th>
                   <th
                     className="p-2.5 text-left cursor-pointer select-none hover:bg-gray-700"
@@ -235,7 +235,7 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
                   >
                     Total {sortIcon("total")}
                   </th>
-                  <th className="p-2.5 text-left">Status</th>
+                  <th className="p-2.5 text-left">Statut</th>
                   <th
                     className="p-2.5 text-left cursor-pointer select-none hover:bg-gray-700"
                     onClick={() => toggleSort("date")}
@@ -271,7 +271,7 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
                             <div className="space-y-3">
                               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
                                 <div>
-                                  <span className="text-gray-500 text-xs block">Phone</span>
+                                  <span className="text-gray-500 text-xs block">Téléphone</span>
                                   <span className="font-medium">{order.phone}</span>
                                 </div>
                                 <div>
@@ -279,12 +279,12 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
                                   <span className="font-medium">{order.email}</span>
                                 </div>
                                 <div className="col-span-2">
-                                  <span className="text-gray-500 text-xs block">Address</span>
+                                  <span className="text-gray-500 text-xs block">Adresse</span>
                                   <span className="font-medium">{order.address}</span>
                                 </div>
                               </div>
                               <div>
-                                <span className="text-gray-500 text-xs block mb-1">Items</span>
+                                <span className="text-gray-500 text-xs block mb-1">Articles</span>
                                 <div className="flex flex-wrap gap-2">
                                   {order.items.map((item, idx) => (
                                     <span key={idx} className="bg-white border rounded px-2 py-1 text-xs">
@@ -337,7 +337,7 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
                     <div className="border-t px-3 py-3 space-y-2 text-sm bg-white/60">
                       <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <span className="text-gray-500 text-xs block">Phone</span>
+                          <span className="text-gray-500 text-xs block">Téléphone</span>
                           <span>{order.phone}</span>
                         </div>
                         <div>
@@ -350,11 +350,11 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
                         </div>
                       </div>
                       <div>
-                        <span className="text-gray-500 text-xs block">Address</span>
+                        <span className="text-gray-500 text-xs block">Adresse</span>
                         <span>{order.address}</span>
                       </div>
                       <div>
-                        <span className="text-gray-500 text-xs block mb-1">Items</span>
+                        <span className="text-gray-500 text-xs block mb-1">Articles</span>
                         <ul className="space-y-1">
                           {order.items.map((item, idx) => (
                             <li key={idx} className="text-gray-700">
@@ -374,7 +374,7 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
           {totalPages > 1 && (
             <div className="flex items-center justify-between mt-4 text-sm">
               <span className="text-gray-500">
-                Page {safePage} of {totalPages}
+                Page {safePage} sur {totalPages}
               </span>
               <div className="flex gap-1">
                 <button

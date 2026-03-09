@@ -14,7 +14,7 @@ const DeliveryMapView = dynamic(
     ssr: false,
     loading: () => (
       <div className="w-full h-full bg-gray-100 rounded animate-pulse flex items-center justify-center">
-        <p className="text-gray-500 text-sm">Loading map...</p>
+        <p className="text-gray-500 text-sm">Chargement de la carte...</p>
       </div>
     ),
   }
@@ -54,19 +54,19 @@ export default function DeliveryMap({ orders, setOrders }: DeliveryMapProps) {
   return (
     <div>
       <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">
-        Delivery Map
+        Carte de Livraison
       </h2>
       <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
-        Orders ready for delivery. Mark as delivered when completed.
+        Commandes prêtes pour la livraison. Marquez comme livré une fois terminé.
       </p>
 
       {readyOrders.length === 0 ? (
         <p className="text-gray-500 italic mb-4">
-          No orders ready for delivery
+          Aucune commande prête pour la livraison
         </p>
       ) : (
         <p className="mb-3 sm:mb-4 font-semibold text-sm sm:text-base">
-          {readyOrders.length} order(s) ready for delivery
+          {readyOrders.length} commande(s) prête(s) pour la livraison
         </p>
       )}
 
@@ -74,11 +74,11 @@ export default function DeliveryMap({ orders, setOrders }: DeliveryMapProps) {
         {/* Orders List */}
         <div className="w-full md:w-80 border border-gray-300 rounded overflow-hidden">
           <div className="bg-gray-800 text-white p-3 font-semibold">
-            Delivery Orders
+            Commandes de Livraison
           </div>
           <div className="max-h-[300px] md:max-h-[500px] overflow-y-auto">
             {readyOrders.length === 0 ? (
-              <p className="p-4 text-gray-500 italic text-sm">No orders</p>
+              <p className="p-4 text-gray-500 italic text-sm">Aucune commande</p>
             ) : (
               readyOrders.map((order) => (
                 <div
@@ -97,7 +97,7 @@ export default function DeliveryMap({ orders, setOrders }: DeliveryMapProps) {
                           : "bg-orange-500 text-white"
                       }`}
                     >
-                      {hiddenOrders.has(order.id!) ? "Show" : "Hide"}
+                      {hiddenOrders.has(order.id!) ? "Afficher" : "Masquer"}
                     </button>
                   </div>
                   <div className="text-sm text-gray-600 mb-2">
@@ -120,7 +120,7 @@ export default function DeliveryMap({ orders, setOrders }: DeliveryMapProps) {
                         onClick={() => setEditingOrder(order)}
                         className="bg-blue-600 text-white px-2 py-1 rounded text-xs hover:bg-blue-700"
                       >
-                        Edit
+                        Modifier
                       </button>
                       <button
                         onClick={() =>
@@ -128,7 +128,7 @@ export default function DeliveryMap({ orders, setOrders }: DeliveryMapProps) {
                         }
                         className="bg-green-600 text-white px-2 py-1 rounded text-xs hover:bg-green-700"
                       >
-                        Delivered
+                        Livré
                       </button>
                       <button
                         onClick={() =>
@@ -136,7 +136,7 @@ export default function DeliveryMap({ orders, setOrders }: DeliveryMapProps) {
                         }
                         className="bg-orange-600 text-white px-2 py-1 rounded text-xs hover:bg-orange-700"
                       >
-                        Returned
+                        Retourné
                       </button>
                     </div>
                   </div>

@@ -6,7 +6,7 @@ import AdminDashboard from "@/features/admin/components/admin-dashboard"
 export default function DashboardPage() {
   const { loading, authenticated } = useAdminAuth()
 
-  if (loading || !authenticated) return <p>Loading...</p>
+  if (loading || !authenticated) return <p>Chargement...</p>
 
   return <AdminDashboard />
 }
