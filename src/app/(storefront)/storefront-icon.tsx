@@ -1,6 +1,11 @@
 "use client"
 
-import StorefrontIcon from "@mui/icons-material/Storefront"
+import dynamic from "next/dynamic"
+
+const StorefrontIcon = dynamic(
+  () => import("@mui/icons-material/Storefront"),
+  { ssr: false }
+)
 
 export default function StorefrontIconClient() {
   return <StorefrontIcon style={{ fontSize: 40 }} />
