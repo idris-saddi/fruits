@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { Suspense, useState, useEffect } from "react"
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth"
 import { auth } from "@/shared/lib/firebase"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -8,6 +8,14 @@ import { useRouter, useSearchParams } from "next/navigation"
 const googleProvider = new GoogleAuthProvider()
 
 export default function AdminLoginPage() {
+  return (
+    <Suspense>
+      <AdminLoginContent />
+    </Suspense>
+  )
+}
+
+function AdminLoginContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [error, setError] = useState("")
