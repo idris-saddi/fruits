@@ -1,6 +1,8 @@
 "use client"
 
 import { formatPrice } from "@/shared/utils/format"
+import InventoryIcon from "@mui/icons-material/Inventory"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 
 interface CartItem {
   fruitId: string
@@ -19,7 +21,7 @@ export default function OrderSummary({ items, total }: OrderSummaryProps) {
   return (
     <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 h-fit sticky top-8 mb-24 lg:mb-0">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-        <span className="text-2xl">📦</span>
+        <InventoryIcon fontSize="large" />
         Order Summary
       </h2>
 
@@ -55,15 +57,15 @@ export default function OrderSummary({ items, total }: OrderSummaryProps) {
 
       <div className="mt-6 space-y-3 text-sm text-gray-600">
         <div className="flex items-center gap-2">
-          <span className="text-green-500">✓</span>
+          <CheckCircleIcon sx={{ fontSize: 18, color: "#22c55e" }} />
           <span>Free delivery on orders over 100 TND</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-green-500">✓</span>
+          <CheckCircleIcon sx={{ fontSize: 18, color: "#22c55e" }} />
           <span>Fresh fruits guarantee</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-green-500">✓</span>
+          <CheckCircleIcon sx={{ fontSize: 18, color: "#22c55e" }} />
           <span>24h delivery in Tunis area</span>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { getAvailableFruits } from "@/features/catalog/services/fruits.service"
 import FruitCard from "@/features/catalog/components/fruit-card"
+import StorefrontIconClient from "./storefront-icon"
 
 export default async function Home() {
   const fruits = await getAvailableFruits()
@@ -11,7 +12,7 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="text-4xl">🍓</div>
+              <StorefrontIconClient />
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">
                   Fruits OK
@@ -75,7 +76,7 @@ export default async function Home() {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12 mt-20">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <div className="text-4xl mb-4">🍊🍋🍇</div>
+          <div className="text-4xl mb-4"><StorefrontIconClient /></div>
           <p className="text-gray-400">
             © 2026 Fruits OK - Fresh Fruits Delivery in Tunisia
           </p>

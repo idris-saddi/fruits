@@ -10,6 +10,10 @@ import {
 } from "@/features/checkout/schemas/checkout.schema"
 import { geocodeAddress } from "@/shared/services/geocoding.service"
 import { useToast } from "@/shared/hooks/use-toast"
+import EditNoteIcon from "@mui/icons-material/EditNote"
+import LocationOnIcon from "@mui/icons-material/LocationOn"
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline"
+import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty"
 
 const AddressMap = dynamic(
   () =>
@@ -71,7 +75,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
       if (result) {
         setLocation({ lat: result.lat, lng: result.lng })
         showToast({
-          message: "📍 Location found on map!",
+          message: "Location found on map!",
           type: "success",
           duration: 2000,
         })
@@ -117,7 +121,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
     <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
       {ToastComponent}
       <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-        <span className="text-2xl">📝</span>
+        <EditNoteIcon fontSize="large" />
         Delivery Information
       </h2>
 
@@ -135,7 +139,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
             className="w-full border-2 border-gray-200 focus:border-rose-500 p-4 rounded-xl outline-none transition-colors"
           />
           {errors.customerName && (
-            <p className="text-red-500 text-sm mt-1">✗ Name is required</p>
+            <p className="text-red-500 text-sm mt-1 flex items-center gap-1"><ErrorOutlineIcon sx={{ fontSize: 16 }} /> Name is required</p>
           )}
         </div>
 
@@ -149,8 +153,8 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
             className="w-full border-2 border-gray-200 focus:border-rose-500 p-4 rounded-xl outline-none transition-colors"
           />
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">
-              ✗ Valid email required
+            <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+              <ErrorOutlineIcon sx={{ fontSize: 16 }} /> Valid email required
             </p>
           )}
         </div>
@@ -165,8 +169,8 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
             className="w-full border-2 border-gray-200 focus:border-rose-500 p-4 rounded-xl outline-none transition-colors"
           />
           {errors.phone && (
-            <p className="text-red-500 text-sm mt-1">
-              ✗ Phone number required
+            <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+              <ErrorOutlineIcon sx={{ fontSize: 16 }} /> Phone number required
             </p>
           )}
         </div>
@@ -182,15 +186,15 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
             className="w-full border-2 border-gray-200 focus:border-rose-500 p-4 rounded-xl outline-none transition-colors resize-none"
           />
           {errors.address && (
-            <p className="text-red-500 text-sm mt-1">
-              ✗ Address is required
+            <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+              <ErrorOutlineIcon sx={{ fontSize: 16 }} /> Address is required
             </p>
           )}
 
           {showMap && (
             <div className="mt-4">
-              <p className="text-sm font-semibold text-gray-700 mb-2">
-                📍 Delivery Location - Click to adjust
+              <p className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                <LocationOnIcon sx={{ fontSize: 18 }} /> Delivery Location - Click to adjust
               </p>
               {location ? (
                 <AddressMap
@@ -202,7 +206,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
               ) : (
                 <div className="w-full h-[300px] rounded-xl overflow-hidden border-2 border-gray-200 flex items-center justify-center bg-gray-50">
                   <div className="text-center text-gray-500">
-                    <div className="text-4xl mb-2">📍</div>
+                    <LocationOnIcon sx={{ fontSize: 40, mb: 1 }} />
                     <p>Locating address...</p>
                   </div>
                 </div>
@@ -212,7 +216,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
 
           {isGeocoding && (
             <div className="mt-2 text-sm text-gray-500 flex items-center gap-2">
-              <span className="animate-spin">⌛</span>
+              <HourglassEmptyIcon className="animate-spin" sx={{ fontSize: 16 }} />
               <span>Finding location on map...</span>
             </div>
           )}
@@ -223,7 +227,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
           disabled={isSubmitting}
           className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 disabled:from-gray-400 disabled:to-gray-400 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all mt-8"
         >
-          {isSubmitting ? "Processing... ⏳" : "Place Order"}
+          {isSubmitting ? <><HourglassEmptyIcon sx={{ fontSize: 20 }} /> Processing...</> : "Place Order"}
         </button>
       </form>
     </div>

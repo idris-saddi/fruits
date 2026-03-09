@@ -16,8 +16,8 @@ import icon from "leaflet/dist/images/marker-icon.png"
 import iconShadow from "leaflet/dist/images/marker-shadow.png"
 
 const DefaultIcon = L.icon({
-  iconUrl: icon.src,
-  shadowUrl: iconShadow.src,
+  iconUrl: typeof icon === "string" ? icon : icon.src,
+  shadowUrl: typeof iconShadow === "string" ? iconShadow : iconShadow.src,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],

@@ -1,6 +1,10 @@
 "use client"
 
 import { useEffect } from "react"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
+import ErrorIcon from "@mui/icons-material/Error"
+import InfoIcon from "@mui/icons-material/Info"
+import CloseIcon from "@mui/icons-material/Close"
 
 interface ToastProps {
   message: string
@@ -27,9 +31,9 @@ export default function Toast({
   }
 
   const icons = {
-    success: "✓",
-    error: "✕",
-    info: "ℹ",
+    success: <CheckCircleIcon fontSize="small" />,
+    error: <ErrorIcon fontSize="small" />,
+    info: <InfoIcon fontSize="small" />,
   }
 
   return (
@@ -47,7 +51,7 @@ export default function Toast({
           onClick={onClose}
           className="bg-white/20 hover:bg-white/30 active:bg-white/40 rounded-full w-7 h-7 md:w-8 md:h-8 flex items-center justify-center transition-colors shrink-0 text-sm md:text-base"
         >
-          ✕
+          <CloseIcon fontSize="small" />
         </button>
       </div>
     </div>

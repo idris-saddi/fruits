@@ -14,6 +14,11 @@ import { db } from "@/shared/lib/firebase"
 import { Fruit } from "@/types/fruit"
 import FruitModal from "./fruit-modal"
 import { formatPrice } from "@/shared/utils/format"
+import AddIcon from "@mui/icons-material/Add"
+import ToggleOnIcon from "@mui/icons-material/ToggleOn"
+import ToggleOffIcon from "@mui/icons-material/ToggleOff"
+import EditIcon from "@mui/icons-material/Edit"
+import DeleteIcon from "@mui/icons-material/Delete"
 
 export default function FruitsManagement() {
   const [fruits, setFruits] = useState<Fruit[]>([])
@@ -107,9 +112,9 @@ export default function FruitsManagement() {
         <h2 className="text-2xl font-bold">Fruits Inventory</h2>
         <button
           onClick={() => setModalData({ mode: "add" })}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-1"
         >
-          + Add New Fruit
+          <AddIcon fontSize="small" /> Add New Fruit
         </button>
       </div>
 
@@ -175,19 +180,19 @@ export default function FruitsManagement() {
                         : "bg-green-600 text-white hover:bg-green-700"
                     }`}
                   >
-                    {fruit.isAvailable ? "Disable" : "Enable"}
+                    {fruit.isAvailable ? <><ToggleOffIcon fontSize="small" /> Disable</> : <><ToggleOnIcon fontSize="small" /> Enable</>}
                   </button>
                   <button
                     onClick={() => setModalData({ mode: "edit", fruit })}
-                    className="flex items-center justify-center bg-blue-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-blue-700 transition-colors"
+                    className="flex items-center justify-center gap-1 bg-blue-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-blue-700 transition-colors"
                   >
-                    Edit
+                    <EditIcon fontSize="small" /> Edit
                   </button>
                   <button
                     onClick={() => deleteFruit(fruit)}
-                    className="flex items-center justify-center bg-red-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-red-700 transition-colors"
+                    className="flex items-center justify-center gap-1 bg-red-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-red-700 transition-colors"
                   >
-                    Delete
+                    <DeleteIcon fontSize="small" /> Delete
                   </button>
                 </div>
               </div>

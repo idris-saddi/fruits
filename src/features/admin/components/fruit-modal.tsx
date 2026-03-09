@@ -2,6 +2,8 @@
 
 import { Fruit } from "@/types/fruit"
 import { useState } from "react"
+import CloseIcon from "@mui/icons-material/Close"
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"
 
 interface FruitModalProps {
   fruit?: Fruit
@@ -165,16 +167,16 @@ export default function FruitModal({
                   className="mt-5 bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
                   title="Remove option"
                 >
-                  ✕
+                  <CloseIcon fontSize="small" />
                 </button>
               </div>
             ))}
           </div>
           <button
             onClick={addOption}
-            className="w-full mt-2 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300"
+            className="w-full mt-2 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 flex items-center justify-center gap-1"
           >
-            + Add Another Option
+            <AddCircleOutlineIcon fontSize="small" /> Add Another Option
           </button>
         </div>
 

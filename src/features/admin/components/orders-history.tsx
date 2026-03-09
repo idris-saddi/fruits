@@ -3,6 +3,15 @@
 import { useState, useMemo, Fragment } from "react"
 import { Order } from "@/types/order"
 import { formatPrice } from "@/shared/utils/format"
+import SwapVertIcon from "@mui/icons-material/SwapVert"
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import ChevronRightIcon from "@mui/icons-material/ChevronRight"
+import FirstPageIcon from "@mui/icons-material/FirstPage"
+import LastPageIcon from "@mui/icons-material/LastPage"
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore"
+import NavigateNextIcon from "@mui/icons-material/NavigateNext"
 
 interface OrdersHistoryProps {
   orders: Order[]
@@ -126,8 +135,8 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
   }
 
   const sortIcon = (field: SortField) => {
-    if (sortField !== field) return "↕"
-    return sortDir === "asc" ? "↑" : "↓"
+    if (sortField !== field) return <SwapVertIcon sx={{ fontSize: 14, verticalAlign: "middle" }} />
+    return sortDir === "asc" ? <ArrowUpwardIcon sx={{ fontSize: 14, verticalAlign: "middle" }} /> : <ArrowDownwardIcon sx={{ fontSize: 14, verticalAlign: "middle" }} />
   }
 
   return (
@@ -245,7 +254,7 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
                         className={`border-b cursor-pointer hover:bg-gray-100 transition-colors ${config?.row ?? ""}`}
                         onClick={() => setExpandedId(isExpanded ? null : order.id ?? null)}
                       >
-                        <td className="p-2.5 text-gray-400 text-xs w-8">{isExpanded ? "▼" : "▶"}</td>
+                        <td className="p-2.5 text-gray-400 text-xs w-8">{isExpanded ? <ExpandMoreIcon sx={{ fontSize: 16 }} /> : <ChevronRightIcon sx={{ fontSize: 16 }} />}</td>
                         <td className="p-2.5 font-medium">{order.customerName}</td>
                         <td className="p-2.5 text-gray-600">{order.items.length}</td>
                         <td className="p-2.5 font-semibold">{formatPrice(order.totalPrice)}</td>
@@ -312,7 +321,7 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
                     onClick={() => setExpandedId(isExpanded ? null : order.id ?? null)}
                   >
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-gray-400 text-xs">{isExpanded ? "▼" : "▶"}</span>
+                      {isExpanded ? <ExpandMoreIcon sx={{ fontSize: 16, color: "#9ca3af" }} /> : <ChevronRightIcon sx={{ fontSize: 16, color: "#9ca3af" }} />}
                       <span className="font-medium truncate">{order.customerName}</span>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
@@ -373,14 +382,14 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
                   disabled={safePage === 1}
                   className="px-2 py-1 border rounded disabled:opacity-30 hover:bg-gray-100"
                 >
-                  ««
+                  <FirstPageIcon sx={{ fontSize: 18 }} />
                 </button>
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={safePage === 1}
                   className="px-2 py-1 border rounded disabled:opacity-30 hover:bg-gray-100"
                 >
-                  ‹
+                  <NavigateBeforeIcon sx={{ fontSize: 18 }} />
                 </button>
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   let pageNum: number
@@ -408,14 +417,14 @@ export default function OrdersHistory({ orders }: OrdersHistoryProps) {
                   disabled={safePage === totalPages}
                   className="px-2 py-1 border rounded disabled:opacity-30 hover:bg-gray-100"
                 >
-                  ›
+                  <NavigateNextIcon sx={{ fontSize: 18 }} />
                 </button>
                 <button
                   onClick={() => setPage(totalPages)}
                   disabled={safePage === totalPages}
                   className="px-2 py-1 border rounded disabled:opacity-30 hover:bg-gray-100"
                 >
-                  »»
+                  <LastPageIcon sx={{ fontSize: 18 }} />
                 </button>
               </div>
             </div>

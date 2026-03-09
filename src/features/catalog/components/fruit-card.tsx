@@ -4,6 +4,7 @@ import { Fruit } from "@/types/fruit"
 import { useCartStore } from "@/features/cart/store/cart.store"
 import { useState } from "react"
 import { formatPrice } from "@/shared/utils/format"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 
 interface FruitCardProps {
   fruit: Fruit
@@ -60,7 +61,7 @@ export default function FruitCard({ fruit }: FruitCardProps) {
 
       {showSuccess && (
         <div className="absolute top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 animate-bounce">
-          <span className="text-xl">✓</span>
+          <CheckCircleIcon fontSize="small" />
           <span className="font-medium">Added!</span>
         </div>
       )}

@@ -5,6 +5,11 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/shared/hooks/use-toast"
 import { formatPrice } from "@/shared/utils/format"
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag"
+import CloseIcon from "@mui/icons-material/Close"
+import RemoveIcon from "@mui/icons-material/Remove"
+import AddIcon from "@mui/icons-material/Add"
 
 export default function FloatingCart() {
   const items = useCartStore((s) => s.items)
@@ -38,8 +43,8 @@ export default function FloatingCart() {
         <div className="fixed bottom-0 left-0 right-0 md:bottom-6 md:right-6 md:left-auto md:w-auto z-[1200] pointer-events-none">
           <div className="pointer-events-auto bg-gradient-to-r from-rose-500 via-pink-500 to-orange-400 text-white rounded-t-2xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 flex justify-between items-center shadow-2xl backdrop-blur-lg border-2 border-white/20 md:hover:scale-105 transition-all duration-300 w-full md:w-auto md:min-w-[400px]">
             <div className="flex items-center gap-3 md:gap-4 flex-1 md:flex-initial">
-              <div className="bg-white/20 rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-xl md:text-2xl shrink-0">
-                🛒
+              <div className="bg-white/20 rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shrink-0">
+                <ShoppingCartIcon />
               </div>
               <div>
                 <p className="text-xs md:text-sm text-white/90 font-medium">
@@ -79,7 +84,7 @@ export default function FloatingCart() {
               <div className="flex items-center justify-between mb-6 md:mb-8">
                 <div>
                   <h2 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
-                    <span className="text-2xl md:text-3xl">🛍️</span>
+                    <ShoppingBagIcon sx={{ fontSize: { xs: 28, md: 32 } }} />
                     Your Cart
                   </h2>
                   <p className="text-gray-500 text-sm mt-1">
@@ -91,7 +96,7 @@ export default function FloatingCart() {
                   className="text-gray-400 hover:text-gray-600 active:text-gray-700 text-3xl md:text-4xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
                   aria-label="Close cart"
                 >
-                  ×
+                  <CloseIcon />
                 </button>
               </div>
 
@@ -125,7 +130,7 @@ export default function FloatingCart() {
                         }
                         className="bg-gray-200 hover:bg-gray-300 text-gray-700 w-8 h-8 rounded-full flex items-center justify-center font-bold transition-colors"
                       >
-                        −
+                        <RemoveIcon fontSize="small" />
                       </button>
                       <span className="w-8 text-center font-semibold">
                         {item.blocks}
@@ -136,7 +141,7 @@ export default function FloatingCart() {
                         }
                         className="bg-gray-200 hover:bg-gray-300 text-gray-700 w-8 h-8 rounded-full flex items-center justify-center font-bold transition-colors"
                       >
-                        +
+                        <AddIcon fontSize="small" />
                       </button>
                       <button
                         onClick={() =>
